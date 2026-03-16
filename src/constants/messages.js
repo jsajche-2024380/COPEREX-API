@@ -8,4 +8,11 @@ export const messages = {
     TOKEN_INVALID: 'Token no válido',
     VALIDATION_ERROR: 'Error de validación en los datos enviados',
     SERVER_ERROR: 'Error interno del servidor',
+    ADMIN_CREATED: 'Administrador creado exitosamente',
+    ADMIN_UPDATED: 'Administrador actualizado exitosamente',
+    ADMIN_NOT_FOUND: 'Administrador no encontrado',
+    ADMIN_EMAIL_EXISTS: 'El correo electrónico ya está registrado',
+    ADMIN_CANNOT_EDIT_SELF: 'No puedes editar tu propio perfil por esta ruta',
+    PASSWORD_CHANGED: 'Contraseña actualizada exitosamente',
+    PASSWORD_INCORRECT: 'La contraseña actual es incorrecta',
 };
