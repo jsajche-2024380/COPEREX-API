@@ -1,11 +1,10 @@
 import rateLimit from 'express-rate-limit';
+import { messages } from '../src/constants/messages.js';
 
 export const generalLimit = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
-    message: {
-        msg: 'Demasiadas peticiones desde esta IP, intente más tarde',
-    },
+    message: { msg: messages.RATE_LIMIT_EXCEEDED },
     standardHeaders: true,
     legacyHeaders: false,
 });

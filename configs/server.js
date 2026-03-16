@@ -5,6 +5,7 @@ import { generalLimit } from '../middlewares/request-limit.js';
 import authRoutes from '../src/routes/auth.routes.js';
 import adminRoutes from '../src/routes/admin.routes.js';
 import companyRoutes from '../src/routes/company.routes.js';
+import { messages } from '../src/constants/messages.js';
 
 const app = express();
 
@@ -19,9 +20,7 @@ app.use('/api/admins', adminRoutes);
 app.use('/api/companies', companyRoutes);
 
 app.use((_req, res) => {
-    res.status(404).json({
-        msg: 'La ruta solicitada no existe',
-    });
+    res.status(404).json({ msg: messages.ROUTE_NOT_FOUND });
 });
 
 export default app;

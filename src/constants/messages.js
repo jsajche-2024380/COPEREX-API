@@ -19,5 +19,8 @@ export const messages = {
     COMPANY_UPDATED: 'Empresa actualizada exitosamente',
     COMPANY_NOT_FOUND: 'Empresa no encontrada',
     COMPANY_NAME_EXISTS: 'Ya existe una empresa con ese nombre',
+    REPORT_GENERATED: 'Reporte generado exitosamente',
     REPORT_NO_DATA: 'No hay empresas registradas para generar el reporte',
+    ROUTE_NOT_FOUND: 'La ruta solicitada no existe',
+    RATE_LIMIT_EXCEEDED: 'Demasiadas peticiones, intente más tarde',
 };
