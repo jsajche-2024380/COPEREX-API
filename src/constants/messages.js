@@ -15,4 +15,9 @@ export const messages = {
     ADMIN_CANNOT_EDIT_SELF: 'No puedes editar tu propio perfil por esta ruta',
     PASSWORD_CHANGED: 'Contraseña actualizada exitosamente',
     PASSWORD_INCORRECT: 'La contraseña actual es incorrecta',
+    COMPANY_CREATED: 'Empresa registrada exitosamente',
+    COMPANY_UPDATED: 'Empresa actualizada exitosamente',
+    COMPANY_NOT_FOUND: 'Empresa no encontrada',
+    COMPANY_NAME_EXISTS: 'Ya existe una empresa con ese nombre',
+    REPORT_NO_DATA: 'No hay empresas registradas para generar el reporte',
 };
