@@ -9,3 +9,13 @@ export const generalLimit = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
+
+export const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: {
+        msg: 'Demasiados intentos de login, intente más tarde',
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});

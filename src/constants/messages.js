@@ -1,0 +1,11 @@
+export const messages = {
+    AUTH_LOGIN_SUCCESS: 'Inicio de sesión exitoso',
+    AUTH_LOGOUT_SUCCESS: 'Sesión cerrada correctamente',
+    AUTH_INVALID_CREDENTIALS: 'Correo o contraseña incorrectos',
+    AUTH_ACCOUNT_LOCKED: 'Cuenta bloqueada por múltiples intentos fallidos',
+    TOKEN_MISSING: 'No se proporcionó token de autenticación',
+    TOKEN_EXPIRED: 'Token expirado, por favor inicie sesión nuevamente',
+    TOKEN_INVALID: 'Token no válido',
+    VALIDATION_ERROR: 'Error de validación en los datos enviados',
+    SERVER_ERROR: 'Error interno del servidor',
+};
