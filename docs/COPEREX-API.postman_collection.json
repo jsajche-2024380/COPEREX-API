@@ -1,0 +1,391 @@
+{
+	"info": {
+		"_postman_id": "coperex-api-collection",
+		"name": "COPEREX-API - Feria Interfer",
+		"description": "Colección para probar todos los endpoints de la API COPEREX.\n\n🔐 REQUISITO DE SEGURIDAD: Todas las rutas excepto Login requieren el token en Authorization como Bearer Token.\n\n✅ PASO 1: Ejecutar Login primero. El token se guarda automáticamente en {{token}}.\n✅ PASO 2: En cada petición protegida, en la pestaña Authorization elegir tipo «Bearer Token» y pegar el token (o usar {{token}}). Las peticiones de esta colección ya llevan Authorization: Bearer {{token}}.\n\n❌ Sin token o con token inválido/expirado la API responde 401 con mensajes:\n• Sin token: «No se proporcionó token... Use Authorization: Bearer <token>»\n• Token expirado: «Token expirado, inicie sesión nuevamente»\n• Token inválido: «Token no válido...»\n\nSi ves 401, haz Login de nuevo y vuelve a enviar la petición.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.token) {",
+									"    pm.collectionVariables.set('token', json.token);",
+									"    console.log('✅ Token guardado correctamente');",
+									"} else {",
+									"    console.log('❌ No se encontró token en la respuesta');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@coperex.com\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/auth/login",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "auth", "login"]
+						},
+						"description": "Inicio de sesión. El token se guarda automáticamente en la variable {{token}}."
+					}
+				},
+				{
+					"name": "Me (perfil del admin logueado)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/auth/me",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "auth", "me"]
+						},
+						"description": "Devuelve el perfil del administrador autenticado."
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/auth/logout",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "auth", "logout"]
+						},
+						"description": "Cerrar sesión. Requiere token válido."
+					}
+				}
+			]
+		},
+		{
+			"name": "Admins",
+			"item": [
+				{
+					"name": "Listar todos los admins",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/admins",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "admins"]
+						}
+					}
+				},
+				{
+					"name": "Obtener admin por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/admins/:id",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "admins", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Pega aquí el _id del administrador"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Crear administrador",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Nuevo Admin\",\n    \"email\": \"nuevo@coperex.com\",\n    \"password\": \"Password123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/admins",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "admins"]
+						},
+						"description": "Nombre: mínimo 3 caracteres, solo letras. Password: mínimo 8, una mayúscula y un número."
+					}
+				},
+				{
+					"name": "Actualizar administrador",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Nombre Actualizado\",\n    \"email\": \"actualizado@coperex.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/admins/:id",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "admins", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Pega aquí el _id del admin a editar (no puede ser el tuyo propio)"
+								}
+							]
+						},
+						"description": "No puedes editar tu propio perfil por esta ruta."
+					}
+				},
+				{
+					"name": "Cambiar mi contraseña",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"Admin123!\",\n    \"newPassword\": \"NuevaPassword123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/admins/change-password",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "admins", "change-password"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Companies",
+			"item": [
+				{
+					"name": "Listar empresas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/companies?sort=AZ",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "companies"],
+							"query": [
+								{
+									"key": "category",
+									"value": "TECNOLOGÍA",
+									"disabled": true,
+									"description": "TECNOLOGÍA | SALUD | EDUCACIÓN | COMERCIO | INDUSTRIA | SERVICIOS | OTRO"
+								},
+								{
+									"key": "impactLevel",
+									"value": "NACIONAL",
+									"disabled": true,
+									"description": "LOCAL | NACIONAL | INTERNACIONAL"
+								},
+								{
+									"key": "yearsOfExperience",
+									"value": "5",
+									"disabled": true,
+									"description": "Años de trayectoria (exacto): empresas con exactamente N años"
+								},
+								{
+									"key": "minYears",
+									"value": "0",
+									"disabled": true,
+									"description": "Años de trayectoria (mínimo): empresas con al menos N años"
+								},
+								{
+									"key": "maxYears",
+									"value": "100",
+									"disabled": true,
+									"description": "Años de trayectoria (máximo): empresas con hasta N años"
+								},
+								{
+									"key": "sort",
+									"value": "AZ",
+									"description": "AZ = A→Z  |  ZA = Z→A"
+								}
+							]
+						},
+						"description": "Filtros: categoría, nivel de impacto, años de trayectoria (exacto con yearsOfExperience o rango con minYears y maxYears). Orden: sort=AZ o sort=ZA. Activa los query params que necesites con el checkbox."
+					}
+				},
+				{
+					"name": "Descargar reporte Excel",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/companies/report",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "companies", "report"]
+						},
+						"description": "Descarga el archivo Excel. En Postman: Click en 'Send and Download' (flecha junto a Send)."
+					}
+				},
+				{
+					"name": "Obtener empresa por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/companies/:id",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "companies", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Pega aquí el _id de la empresa"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Registrar empresa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"Mi Empresa SA\",\n    \"impactLevel\": \"NACIONAL\",\n    \"yearsOfExperience\": 5,\n    \"category\": \"TECNOLOGÍA\",\n    \"description\": \"Descripción opcional de la empresa\",\n    \"contactEmail\": \"contacto@miempresa.com\",\n    \"contactPhone\": \"12345678\",\n    \"website\": \"https://miempresa.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/companies",
+							"host": ["http://localhost:3000"],
+							"path": ["api", "companies"]
+						},
+						"description": "contactPhone: exactamente 8 dígitos numéricos."
+					}
+				},
+				{
+					"name": "Actualizar empresa",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"Mi Empresa Actualizada\",\n    \"yearsOfExperience\": 10\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/coperex/v1/companies/:id",
+							"host": ["http://localhost:3000"],
+							"path": ["coperex", "v1", "companies", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Pega aquí el _id de la empresa"
+								}
+							]
+						},
+						"description": "Todos los campos son opcionales en la edición."
+					}
+				}
+			]
+		}
+	]
+}

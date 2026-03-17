@@ -3,17 +3,22 @@ import { messages } from '../constants/messages.js';
 
 export const getAllCompanies = async (filters = {}, sort = '') => {
     const query = {};
+
     if (filters.category) query.category = filters.category;
     if (filters.impactLevel) query.impactLevel = filters.impactLevel;
-    if (filters.yearsOfExperience != null) query.yearsOfExperience = Number(filters.yearsOfExperience);
+
     if (filters.minYears != null || filters.maxYears != null) {
         query.yearsOfExperience = {};
         if (filters.minYears != null) query.yearsOfExperience.$gte = Number(filters.minYears);
         if (filters.maxYears != null) query.yearsOfExperience.$lte = Number(filters.maxYears);
+    } else if (filters.yearsOfExperience != null) {
+        query.yearsOfExperience = filters.yearsOfExperience;
     }
+
     let sortOption = { createdAt: -1 };
     if (sort === 'AZ') sortOption = { companyName: 1 };
     if (sort === 'ZA') sortOption = { companyName: -1 };
+
     return Company.find(query).sort(sortOption).lean();
 };
 
@@ -62,7 +67,6 @@ export const updateCompany = async (id, data) => {
     }
     if (company.companyName) company.companyName = company.companyName.trim();
     if (company.contactEmail) company.contactEmail = company.contactEmail.toLowerCase().trim();
-    company.updatedAt = new Date();
     await company.save();
     return company;
 };

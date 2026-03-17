@@ -1,23 +1,11 @@
 import { body, param } from 'express-validator';
-import Company from '../models/company.model.js';
-
-const IMPACT_LEVELS = ['LOCAL', 'NACIONAL', 'INTERNACIONAL'];
-const CATEGORIES = [
-    'TECNOLOGÍA',
-    'SALUD',
-    'EDUCACIÓN',
-    'COMERCIO',
-    'INDUSTRIA',
-    'SERVICIOS',
-    'OTRO',
-];
+import Company, { IMPACT_LEVELS, CATEGORIES } from '../models/company.model.js';
 
 export const createCompanyValidators = [
     body('companyName')
-        .notEmpty()
-        .withMessage('El nombre de la empresa es obligatorio')
-        .isLength({ min: 2 })
-        .withMessage('El nombre debe tener al menos 2 caracteres')
+        .trim()
+        .notEmpty().withMessage('El nombre de la empresa es obligatorio')
+        .isLength({ min: 2 }).withMessage('Mínimo 2 caracteres')
         .custom(async (name) => {
             const exists = await Company.findOne({
                 companyName: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
@@ -25,47 +13,37 @@ export const createCompanyValidators = [
             if (exists) throw new Error('Ya existe una empresa con ese nombre');
         }),
     body('impactLevel')
-        .notEmpty()
-        .withMessage('El nivel de impacto es obligatorio')
-        .isIn(IMPACT_LEVELS)
-        .withMessage(`El nivel de impacto debe ser uno de: ${IMPACT_LEVELS.join(', ')}`),
+        .notEmpty().withMessage('El nivel de impacto es obligatorio')
+        .isIn(IMPACT_LEVELS).withMessage(`Valores válidos: ${IMPACT_LEVELS.join(', ')}`),
     body('yearsOfExperience')
-        .notEmpty()
-        .withMessage('Los años de trayectoria son obligatorios')
-        .isInt({ min: 0, max: 100 })
-        .withMessage('Los años de trayectoria deben ser un número entre 0 y 100'),
+        .notEmpty().withMessage('Los años de trayectoria son obligatorios')
+        .isInt({ min: 0, max: 200 }).withMessage('Debe ser un número entre 0 y 200'),
     body('category')
-        .notEmpty()
-        .withMessage('La categoría es obligatoria')
-        .isIn(CATEGORIES)
-        .withMessage(`La categoría debe ser una de: ${CATEGORIES.join(', ')}`),
+        .notEmpty().withMessage('La categoría es obligatoria')
+        .isIn(CATEGORIES).withMessage(`Valores válidos: ${CATEGORIES.join(', ')}`),
     body('description')
         .optional()
-        .isLength({ max: 500 })
-        .withMessage('La descripción no puede exceder 500 caracteres'),
+        .isLength({ max: 500 }).withMessage('Máximo 500 caracteres'),
     body('contactEmail')
-        .notEmpty()
-        .withMessage('El email de contacto es obligatorio')
-        .isEmail()
-        .withMessage('Debe ser un correo válido'),
+        .trim()
+        .notEmpty().withMessage('El email de contacto es obligatorio')
+        .isEmail().withMessage('Debe ser un correo válido'),
     body('contactPhone')
-        .notEmpty()
-        .withMessage('El teléfono de contacto es obligatorio')
-        .matches(/^[0-9]{8}$/)
-        .withMessage('El teléfono debe tener exactamente 8 dígitos numéricos'),
+        .trim()
+        .notEmpty().withMessage('El teléfono es obligatorio')
+        .matches(/^[0-9]{8}$/).withMessage('Debe tener exactamente 8 dígitos'),
     body('website')
         .optional()
-        .if((value) => value && value.length > 0)
-        .isURL()
-        .withMessage('El sitio web debe ser una URL válida'),
+        .if((v) => v && v.length > 0)
+        .isURL().withMessage('Debe ser una URL válida'),
 ];
 
 export const updateCompanyValidators = [
     param('id').isMongoId().withMessage('ID de empresa inválido'),
     body('companyName')
         .optional()
-        .isLength({ min: 2 })
-        .withMessage('El nombre debe tener al menos 2 caracteres')
+        .trim()
+        .isLength({ min: 2 }).withMessage('Mínimo 2 caracteres')
         .custom(async (name, { req }) => {
             if (!name) return true;
             const exists = await Company.findOne({
@@ -76,31 +54,26 @@ export const updateCompanyValidators = [
         }),
     body('impactLevel')
         .optional()
-        .isIn(IMPACT_LEVELS)
-        .withMessage(`El nivel de impacto debe ser uno de: ${IMPACT_LEVELS.join(', ')}`),
+        .isIn(IMPACT_LEVELS).withMessage(`Valores válidos: ${IMPACT_LEVELS.join(', ')}`),
     body('yearsOfExperience')
         .optional()
-        .isInt({ min: 0, max: 100 })
-        .withMessage('Los años de trayectoria deben ser un número entre 0 y 100'),
+        .isInt({ min: 0, max: 200 }).withMessage('Debe ser un número entre 0 y 200'),
     body('category')
         .optional()
-        .isIn(CATEGORIES)
-        .withMessage(`La categoría debe ser una de: ${CATEGORIES.join(', ')}`),
+        .isIn(CATEGORIES).withMessage(`Valores válidos: ${CATEGORIES.join(', ')}`),
     body('description')
         .optional()
-        .isLength({ max: 500 })
-        .withMessage('La descripción no puede exceder 500 caracteres'),
+        .isLength({ max: 500 }).withMessage('Máximo 500 caracteres'),
     body('contactEmail')
         .optional()
-        .isEmail()
-        .withMessage('Debe ser un correo válido'),
+        .trim()
+        .isEmail().withMessage('Debe ser un correo válido'),
     body('contactPhone')
         .optional()
-        .matches(/^[0-9]{8}$/)
-        .withMessage('El teléfono debe tener exactamente 8 dígitos numéricos'),
+        .trim()
+        .matches(/^[0-9]{8}$/).withMessage('Debe tener exactamente 8 dígitos'),
     body('website')
         .optional()
-        .if((value) => value && value.length > 0)
-        .isURL()
-        .withMessage('El sitio web debe ser una URL válida'),
+        .if((v) => v && v.length > 0)
+        .isURL().withMessage('Debe ser una URL válida'),
 ];

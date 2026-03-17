@@ -4,26 +4,54 @@ import { messages } from '../constants/messages.js';
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { admin, token } = await loginService(email, password);
+        const { admin, token, expiresAt } = await loginService(email, password);
+
         return res.status(200).json({
+            success: true,
             msg: messages.AUTH_LOGIN_SUCCESS,
-            data: { token, admin },
+            token,
+            expiresAt,
+            data: {
+                id: admin._id,
+                name: admin.name,
+                email: admin.email,
+                role: admin.role,
+                lastLogin: admin.lastLogin,
+            },
         });
     } catch (error) {
-        console.error(error);
+        console.error('Auth | login error:', error.message);
         const status = error.statusCode || 500;
-        const msg = error.message || messages.SERVER_ERROR;
-        return res.status(status).json({ msg });
+        return res.status(status).json({
+            success: false,
+            msg: error.message || messages.SERVER_ERROR,
+        });
     }
 };
 
-export const logout = async (req, res) => {
+export const getMe = async (req, res) => {
     try {
+        const admin = req.admin;
         return res.status(200).json({
-            msg: messages.AUTH_LOGOUT_SUCCESS,
+            success: true,
+            data: {
+                id: admin._id,
+                name: admin.name,
+                email: admin.email,
+                role: admin.role,
+                isActive: admin.isActive,
+                lastLogin: admin.lastLogin,
+                createdAt: admin.createdAt,
+            },
         });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ msg: messages.SERVER_ERROR });
+        return res.status(500).json({ success: false, msg: messages.SERVER_ERROR });
     }
+};
+
+export const logout = async (_req, res) => {
+    return res.status(200).json({
+        success: true,
+        msg: messages.AUTH_LOGOUT_SUCCESS,
+    });
 };

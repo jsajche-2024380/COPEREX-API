@@ -3,7 +3,10 @@ import { hashPassword, comparePassword } from '../../helpers/encrypt.js';
 import { messages } from '../constants/messages.js';
 
 export const getAllAdmins = async () => {
-    return Admin.find().sort({ createdAt: -1 }).select('-password').lean();
+    return Admin.find({ isActive: true })
+        .sort({ createdAt: -1 })
+        .select('-password')
+        .lean();
 };
 
 export const getAdminById = async (id) => {
@@ -23,8 +26,10 @@ export const createAdmin = async (data, creatorId) => {
         email: data.email.toLowerCase().trim(),
         password: hashedPassword,
         createdBy: creatorId,
+        isActive: true,
     });
-    return admin;
+    const { password: _pw, ...adminData } = admin.toObject();
+    return adminData;
 };
 
 export const updateAdmin = async (id, data) => {
@@ -34,10 +39,14 @@ export const updateAdmin = async (id, data) => {
         err.statusCode = 404;
         throw err;
     }
+
     if (data.name !== undefined) admin.name = data.name.trim();
     if (data.email !== undefined) admin.email = data.email.toLowerCase().trim();
+
     await admin.save();
-    return admin;
+
+    const result = await Admin.findById(id).select('-password');
+    return result;
 };
 
 export const updateMyPassword = async (id, currentPassword, newPassword) => {
@@ -47,13 +56,14 @@ export const updateMyPassword = async (id, currentPassword, newPassword) => {
         err.statusCode = 404;
         throw err;
     }
+
     const match = await comparePassword(currentPassword, admin.password);
     if (!match) {
         const err = new Error(messages.PASSWORD_INCORRECT);
         err.statusCode = 400;
         throw err;
     }
+
     admin.password = await hashPassword(newPassword);
     await admin.save();
-    return admin;
 };

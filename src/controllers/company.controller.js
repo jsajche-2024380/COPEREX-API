@@ -14,14 +14,17 @@ export const getAll = async (req, res) => {
         const filters = {};
         if (category) filters.category = category;
         if (impactLevel) filters.impactLevel = impactLevel;
-        if (yearsOfExperience !== undefined) filters.yearsOfExperience = yearsOfExperience;
-        if (minYears !== undefined) filters.minYears = minYears;
-        if (maxYears !== undefined) filters.maxYears = maxYears;
+        if (minYears !== undefined || maxYears !== undefined) {
+            if (minYears !== undefined) filters.minYears = Number(minYears);
+            if (maxYears !== undefined) filters.maxYears = Number(maxYears);
+        } else if (yearsOfExperience !== undefined) {
+            filters.yearsOfExperience = Number(yearsOfExperience);
+        }
         const companies = await getAllCompanies(filters, sort);
-        return res.status(200).json({ data: companies });
+        return res.status(200).json({ success: true, total: companies.length, data: companies });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ msg: messages.SERVER_ERROR });
+        return res.status(500).json({ success: false, msg: messages.SERVER_ERROR });
     }
 };
 
@@ -29,15 +32,15 @@ export const getById = async (req, res) => {
     try {
         const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ msg: 'ID de empresa inválido' });
+            return res.status(400).json({ success: false, msg: 'ID de empresa inválido' });
         }
         const company = await getCompanyById(id);
-        return res.status(200).json({ data: company });
+        return res.status(200).json({ success: true, data: company });
     } catch (error) {
         console.error(error);
         const status = error.statusCode || 500;
         const msg = error.message || messages.SERVER_ERROR;
-        return res.status(status).json({ msg });
+        return res.status(status).json({ success: false, msg });
     }
 };
 
@@ -45,12 +48,12 @@ export const create = async (req, res) => {
     try {
         const adminId = req.admin._id;
         const company = await createCompany(req.body, adminId);
-        return res.status(201).json({ msg: messages.COMPANY_CREATED, data: company });
+        return res.status(201).json({ success: true, msg: messages.COMPANY_CREATED, data: company });
     } catch (error) {
         console.error(error);
         const status = error.statusCode || 500;
         const msg = error.message || messages.SERVER_ERROR;
-        return res.status(status).json({ msg });
+        return res.status(status).json({ success: false, msg });
     }
 };
 
@@ -58,15 +61,15 @@ export const update = async (req, res) => {
     try {
         const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ msg: 'ID de empresa inválido' });
+            return res.status(400).json({ success: false, msg: 'ID de empresa inválido' });
         }
         const company = await updateCompany(id, req.body);
-        return res.status(200).json({ msg: messages.COMPANY_UPDATED, data: company });
+        return res.status(200).json({ success: true, msg: messages.COMPANY_UPDATED, data: company });
     } catch (error) {
         console.error(error);
         const status = error.statusCode || 500;
         const msg = error.message || messages.SERVER_ERROR;
-        return res.status(status).json({ msg });
+        return res.status(status).json({ success: false, msg });
     }
 };
 
@@ -74,7 +77,7 @@ export const generateExcelReport = async (req, res) => {
     try {
         const workbook = await generateExcelWorkbook();
         if (!workbook) {
-            return res.status(200).json({ msg: messages.REPORT_NO_DATA });
+            return res.status(200).json({ success: true, msg: messages.REPORT_NO_DATA });
         }
         res.setHeader(
             'Content-Type',
@@ -85,6 +88,6 @@ export const generateExcelReport = async (req, res) => {
         res.end();
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ msg: messages.SERVER_ERROR });
+        return res.status(500).json({ success: false, msg: messages.SERVER_ERROR });
     }
 };

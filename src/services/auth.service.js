@@ -4,31 +4,31 @@ import { generateJWT } from '../../helpers/generate-jwt.js';
 import { messages } from '../constants/messages.js';
 
 export const loginService = async (email, password) => {
-    const admin = await Admin.findOne({ email: email.toLowerCase() });
+    const admin = await Admin.findOne({ email: email.toLowerCase().trim() });
     if (!admin) {
         const err = new Error(messages.AUTH_INVALID_CREDENTIALS);
-        err.statusCode = 400;
+        err.statusCode = 401;
         throw err;
     }
+
     if (!admin.isActive) {
-        const err = new Error(messages.AUTH_ACCOUNT_LOCKED);
-        err.statusCode = 403;
+        const err = new Error('Cuenta desactivada. Contacta al administrador.');
+        err.statusCode = 423;
         throw err;
     }
+
     const match = await comparePassword(password, admin.password);
     if (!match) {
-        admin.loginAttempts += 1;
-        if (admin.loginAttempts >= 5) {
-            admin.isActive = false;
-        }
-        await admin.save();
         const err = new Error(messages.AUTH_INVALID_CREDENTIALS);
-        err.statusCode = 400;
+        err.statusCode = 401;
         throw err;
     }
-    admin.loginAttempts = 0;
+
     admin.lastLogin = new Date();
     await admin.save();
-    const token = await generateJWT(admin._id.toString(), admin.email, admin.role);
-    return { admin, token };
+
+    const token = await generateJWT(admin._id.toString(), admin.role);
+    const expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000);
+
+    return { admin, token, expiresAt };
 };

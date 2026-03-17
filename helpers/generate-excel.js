@@ -59,7 +59,6 @@ export async function generateExcelWorkbook() {
     });
 
     companies.forEach((company, index) => {
-        const rowIndex = index + 2;
         const row = sheet.addRow([
             company.companyName || '',
             company.category || '',

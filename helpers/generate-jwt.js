@@ -1,17 +1,28 @@
 import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 import { env } from '../configs/app.js';
 
-export const generateJWT = (uid, email, role) => {
+export const generateJWT = (uid, role = 'ADMIN_ROLE') => {
     return new Promise((resolve, reject) => {
-        const payload = { uid, email, role };
-        jwt.sign(
-            payload,
-            env.JWT_SECRET,
-            { expiresIn: env.JWT_EXPIRATION },
-            (err, token) => {
-                if (err) reject(err);
-                else resolve(token);
+        const payload = {
+            sub: uid,
+            role,
+            jti: uuidv4(),
+        };
+
+        const options = {
+            expiresIn: env.JWT_EXPIRATION,
+        };
+        if (env.JWT_ISSUER) options.issuer = env.JWT_ISSUER;
+        if (env.JWT_AUDIENCE) options.audience = env.JWT_AUDIENCE;
+
+        jwt.sign(payload, env.JWT_SECRET, options, (err, token) => {
+            if (err) {
+                console.error('JWT | Error al generar token:', err.message);
+                reject(err);
+            } else {
+                resolve(token);
             }
-        );
+        });
     });
 };
