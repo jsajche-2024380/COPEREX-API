@@ -11,7 +11,7 @@ export const messages = {
     ADMIN_UPDATED: 'Administrador actualizado exitosamente',
     ADMIN_NOT_FOUND: 'Administrador no encontrado',
     ADMIN_EMAIL_EXISTS: 'El correo electrónico ya está registrado',
-    ADMIN_CANNOT_EDIT_SELF: 'No puedes editar tu propio perfil por esta ruta',
+    ADMIN_CANNOT_EDIT_SELF: 'Esta ruta no permite editar el perfil del administrador autenticado',
     PASSWORD_CHANGED: 'Contraseña actualizada exitosamente',
     PASSWORD_INCORRECT: 'La contraseña actual es incorrecta',
     COMPANY_CREATED: 'Empresa registrada exitosamente',

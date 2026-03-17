@@ -15,12 +15,12 @@ async function run() {
         await mongoose.connect(process.env.MONGODB_URI);
         const admin = await Admin.findOne({ email });
         if (!admin) {
-            console.log('No existe un admin con ese email. Ejecuta el servidor (npm run dev) para que el seed lo cree.');
+            console.log('No existe un admin con ese email. El seed crea el admin al arrancar el servidor (npm run dev).');
             process.exit(1);
         }
         admin.password = await hashPassword(newPassword);
         await admin.save();
-        console.log('Contraseña del admin por defecto actualizada. Ya puedes loguearte con:', email, 'y la contraseña de tu .env');
+        console.log('Contraseña del admin por defecto actualizada. Credenciales: email =', email, '| contraseña = valor de DEFAULT_ADMIN_PASSWORD en .env');
     } catch (err) {
         console.error(err);
         process.exit(1);

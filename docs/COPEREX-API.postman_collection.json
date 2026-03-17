@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "coperex-api-collection",
 		"name": "COPEREX-API - Feria Interfer",
-		"description": "Colección para probar todos los endpoints de la API COPEREX.\n\n🔐 REQUISITO DE SEGURIDAD: Todas las rutas excepto Login requieren el token en Authorization como Bearer Token.\n\n✅ PASO 1: Ejecutar Login primero. El token se guarda automáticamente en {{token}}.\n✅ PASO 2: En cada petición protegida, en la pestaña Authorization elegir tipo «Bearer Token» y pegar el token (o usar {{token}}). Las peticiones de esta colección ya llevan Authorization: Bearer {{token}}.\n\n❌ Sin token o con token inválido/expirado la API responde 401 con mensajes:\n• Sin token: «No se proporcionó token... Use Authorization: Bearer <token>»\n• Token expirado: «Token expirado, inicie sesión nuevamente»\n• Token inválido: «Token no válido...»\n\nSi ves 401, haz Login de nuevo y vuelve a enviar la petición.",
+		"description": "Colección de la API COPEREX (Feria Interfer). Incluye todos los endpoints documentados.\n\nAutenticación: todas las rutas excepto Login requieren token JWT en header Authorization: Bearer <token> o x-token. El request Login guarda el token en la variable {{token}}; el resto de requests de la colección usan Authorization: Bearer {{token}}.\n\nRespuestas 401: token faltante (mensaje indica usar Authorization: Bearer), token expirado o token inválido. Para obtener un token nuevo se debe ejecutar de nuevo el request Login.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
@@ -55,7 +55,7 @@
 							"host": ["http://localhost:3000"],
 							"path": ["coperex", "v1", "auth", "login"]
 						},
-						"description": "Inicio de sesión. El token se guarda automáticamente en la variable {{token}}."
+						"description": "Login de administrador. La respuesta incluye token; el test script guarda el token en la variable de colección {{token}}."
 					}
 				},
 				{
@@ -73,7 +73,7 @@
 							"host": ["http://localhost:3000"],
 							"path": ["coperex", "v1", "auth", "me"]
 						},
-						"description": "Devuelve el perfil del administrador autenticado."
+						"description": "Obtiene el perfil del administrador asociado al token (campo sub del JWT)."
 					}
 				},
 				{
@@ -91,7 +91,7 @@
 							"host": ["http://localhost:3000"],
 							"path": ["coperex", "v1", "auth", "logout"]
 						},
-						"description": "Cerrar sesión. Requiere token válido."
+						"description": "Cierre de sesión. Requiere token válido; el cliente debe dejar de usar el token tras la respuesta."
 					}
 				}
 			]
@@ -134,7 +134,7 @@
 								{
 									"key": "id",
 									"value": "",
-									"description": "Pega aquí el _id del administrador"
+									"description": "ID del administrador (MongoDB ObjectId)"
 								}
 							]
 						}
@@ -163,7 +163,7 @@
 							"host": ["http://localhost:3000"],
 							"path": ["coperex", "v1", "admins"]
 						},
-						"description": "Nombre: mínimo 3 caracteres, solo letras. Password: mínimo 8, una mayúscula y un número."
+						"description": "Crear administrador. name: mínimo 3 caracteres. password: mínimo 8, al menos una mayúscula y un número. Validación en admin.validators."
 					}
 				},
 				{
@@ -192,11 +192,11 @@
 								{
 									"key": "id",
 									"value": "",
-									"description": "Pega aquí el _id del admin a editar (no puede ser el tuyo propio)"
+									"description": "ID del administrador a editar (MongoDB ObjectId). No aplicable al admin autenticado."
 								}
 							]
 						},
-						"description": "No puedes editar tu propio perfil por esta ruta."
+						"description": "Actualizar nombre y/o email. Esta ruta no permite editar el perfil del admin autenticado."
 					}
 				},
 				{
@@ -281,7 +281,7 @@
 								}
 							]
 						},
-						"description": "Filtros: categoría, nivel de impacto, años de trayectoria (exacto con yearsOfExperience o rango con minYears y maxYears). Orden: sort=AZ o sort=ZA. Activa los query params que necesites con el checkbox."
+						"description": "PMA punto 3 - Visualización. Listado completo de empresas registradas. Filtros: por años de trayectoria (yearsOfExperience exacto o minYears/maxYears), por categoría (category), por nivel de impacto (impactLevel). Orden: sort=AZ (A-Z) o sort=ZA (Z-A). Params opcionales en pestaña Params."
 					}
 				},
 				{
@@ -299,11 +299,11 @@
 							"host": ["http://localhost:3000"],
 							"path": ["coperex", "v1", "companies", "report"]
 						},
-						"description": "Descarga el archivo Excel. En Postman: Click en 'Send and Download' (flecha junto a Send)."
+						"description": "Devuelve un archivo .xlsx con todas las empresas (Empresas_Interfer.xlsx). En Postman usar Send and Download para guardar el archivo."
 					}
 				},
 				{
-					"name": "Obtener empresa por ID",
+					"name": "Obtener una empresa por ID",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -320,10 +320,11 @@
 								{
 									"key": "id",
 									"value": "",
-									"description": "Pega aquí el _id de la empresa"
+									"description": "ID de la empresa (MongoDB ObjectId)"
 								}
 							]
-						}
+						},
+						"description": "PMA punto 3 - Visualización. Obtiene el detalle de una empresa por su ID."
 					}
 				},
 				{
@@ -347,9 +348,9 @@
 						"url": {
 							"raw": "http://localhost:3000/coperex/v1/companies",
 							"host": ["http://localhost:3000"],
-							"path": ["api", "companies"]
+							"path": ["coperex", "v1", "companies"]
 						},
-						"description": "contactPhone: exactamente 8 dígitos numéricos."
+						"description": "PMA punto 2 - Registro de empresas. Datos clave: nivel de impacto (impactLevel), años de trayectoria (yearsOfExperience), categoría empresarial (category). Adicionales: companyName, contactEmail, contactPhone, description, website. Todos obligatorios excepto description y website. contactPhone: 8 dígitos."
 					}
 				},
 				{
@@ -378,11 +379,11 @@
 								{
 									"key": "id",
 									"value": "",
-									"description": "Pega aquí el _id de la empresa"
+									"description": "ID de la empresa (MongoDB ObjectId)"
 								}
 							]
 						},
-						"description": "Todos los campos son opcionales en la edición."
+						"description": "PMA punto 3 - Editar empresa. Actualización de la información de una empresa registrada. No existe eliminación (DELETE). Body: todos los campos opcionales (companyName, impactLevel, yearsOfExperience, category, description, contactEmail, contactPhone, website)."
 					}
 				}
 			]
