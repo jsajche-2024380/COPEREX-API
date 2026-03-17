@@ -1,3 +1,7 @@
+/**
+ * Punto de entrada de la aplicación.
+ * Conecta a MongoDB, ejecuta el seed de admin por defecto e inicia el servidor HTTP.
+ */
 import { env } from './configs/app.js';
 import { connectMongo } from './configs/mongo.js';
 import app, { BASE_PATH } from './configs/server.js';

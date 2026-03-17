@@ -1,3 +1,7 @@
+/**
+ * Rutas de administradores.
+ * Todas requieren JWT. Rutas específicas (/change-password) antes de las parametrizadas (/:id).
+ */
 import { Router } from 'express';
 import { getAll, getById, create, update, updatePassword } from '../controllers/admin.controller.js';
 import { validateJWT } from '../../middlewares/validate-JWT.js';

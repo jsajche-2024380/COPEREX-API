@@ -1,3 +1,8 @@
+/**
+ * Rutas de empresas (PMA puntos 2, 3 y 4).
+ * GET /report debe ir antes de /:id para que Express no interprete "report" como id.
+ * No existe DELETE (requisito del proyecto).
+ */
 import { Router } from 'express';
 import { getAll, getById, create, update, generateExcelReport } from '../controllers/company.controller.js';
 import { validateJWT } from '../../middlewares/validate-JWT.js';

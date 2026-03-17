@@ -1,3 +1,6 @@
+/**
+ * Validadores para empresas: creación (PMA 2) y actualización; usan IMPACT_LEVELS y CATEGORIES del modelo.
+ */
 import { body, param } from 'express-validator';
 import Company, { IMPACT_LEVELS, CATEGORIES } from '../models/company.model.js';
 

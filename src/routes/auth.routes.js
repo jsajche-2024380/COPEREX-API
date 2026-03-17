@@ -1,3 +1,7 @@
+/**
+ * Rutas de autenticación (PMA punto 1).
+ * Login público con rate limit; /me y /logout requieren JWT.
+ */
 import { Router } from 'express';
 import { login, logout, getMe } from '../controllers/auth.controller.js';
 import { loginValidators } from '../validators/auth.validators.js';

@@ -1,3 +1,6 @@
+/**
+ * Controladores de autenticación: login, perfil del admin (me), logout.
+ */
 import { loginService } from '../services/auth.service.js';
 import { messages } from '../constants/messages.js';
 

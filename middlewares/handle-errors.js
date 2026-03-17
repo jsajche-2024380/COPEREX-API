@@ -1,3 +1,7 @@
+/**
+ * Manejador global de errores de Express.
+ * Debe registrarse como último middleware. Traduce errores de Mongoose y JWT a respuestas JSON.
+ */
 export const errorHandler = (err, req, res, next) => {
     console.error(`[ERROR] ${req.method} ${req.path} | ${err.message}`);
 

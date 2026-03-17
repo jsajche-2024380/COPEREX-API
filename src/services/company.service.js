@@ -1,3 +1,6 @@
+/**
+ * Servicios de empresas: listado con filtros (categoría, impacto, años de trayectoria) y orden AZ/ZA, detalle, creación, actualización.
+ */
 import Company from '../models/company.model.js';
 import { messages } from '../constants/messages.js';
 

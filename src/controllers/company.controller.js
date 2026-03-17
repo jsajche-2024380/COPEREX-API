@@ -1,3 +1,6 @@
+/**
+ * Controladores de empresas: listado con filtros (PMA 3), detalle, registro (PMA 2), actualización, reporte Excel (PMA 4).
+ */
 import mongoose from 'mongoose';
 import {
     getAllCompanies,

@@ -1,3 +1,6 @@
+/**
+ * Modelo de empresa (PMA puntos 2 y 3). Campos: companyName, impactLevel, yearsOfExperience, category, description, contactEmail, contactPhone, website, registeredBy.
+ */
 import mongoose from 'mongoose';
 
 export const IMPACT_LEVELS = ['LOCAL', 'NACIONAL', 'INTERNACIONAL'];

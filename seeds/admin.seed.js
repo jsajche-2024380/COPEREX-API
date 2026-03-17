@@ -1,3 +1,7 @@
+/**
+ * Seed del administrador por defecto.
+ * Crea un único admin si la colección está vacía; no modifica admins existentes.
+ */
 import Admin from '../src/models/admin.model.js';
 import { env } from '../configs/app.js';
 import { hashPassword } from '../helpers/encrypt.js';
@@ -23,5 +27,5 @@ export const checkAndCreateDefaultAdmin = async () => {
 
     console.log('Seeds | Administrador por defecto creado');
     console.log(`Seeds | Email:     ${defaultEmail}`);
-    console.log(`Seeds | Contraseña: ${defaultPassword}  ← cámbiala después del primer login`);
+    console.log(`Seeds | Contraseña: valor de DEFAULT_ADMIN_PASSWORD en .env`);
 };

@@ -1,4 +1,5 @@
 # COPEREX-API
+ pnpm run dev
 
 API REST para la gestión de empresas participantes en la feria **Interfer**. Desarrollada con Node.js, Express y MongoDB. Solo administradores pueden acceder; la autenticación es mediante JWT.
 

@@ -1,7 +1,12 @@
+/**
+ * Generación de tokens JWT.
+ * Payload incluye sub (id del admin), role y jti (uuid). Opcionalmente issuer y audience desde env.
+ */
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { env } from '../configs/app.js';
 
+/** Genera un JWT firmado con el uid y rol indicados. */
 export const generateJWT = (uid, role = 'ADMIN_ROLE') => {
     return new Promise((resolve, reject) => {
         const payload = {

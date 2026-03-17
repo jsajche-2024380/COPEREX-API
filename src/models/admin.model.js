@@ -1,3 +1,6 @@
+/**
+ * Modelo de administrador. Un único rol (ADMIN_ROLE). Campos: name, email, password (hash), role, isActive, lastLogin, createdBy.
+ */
 import mongoose from 'mongoose';
 import { ADMIN_ROLE } from '../constants/roles.js';
 

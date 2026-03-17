@@ -1,3 +1,6 @@
+/**
+ * Validadores para el body del login: email obligatorio y formato válido, password obligatorio (sin validar formato).
+ */
 import { body } from 'express-validator';
 
 export const loginValidators = [

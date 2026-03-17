@@ -1,3 +1,6 @@
+/**
+ * Servicios de administradores: CRUD y cambio de contraseña. Las respuestas excluyen el campo password.
+ */
 import Admin from '../models/admin.model.js';
 import { hashPassword, comparePassword } from '../../helpers/encrypt.js';
 import { messages } from '../constants/messages.js';

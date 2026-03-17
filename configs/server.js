@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * Configuración del servidor Express.
+ * Registra middlewares globales, rutas bajo BASE_PATH y el manejador de errores.
+ */
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -28,6 +32,7 @@ app.use(`${BASE_PATH}/auth`, authRoutes);
 app.use(`${BASE_PATH}/admins`, adminRoutes);
 app.use(`${BASE_PATH}/companies`, companyRoutes);
 
+/** Ruta pública de health check. */
 app.get(`${BASE_PATH}/health`, (_req, res) => {
     res.status(200).json({
         success: true,
@@ -37,6 +42,7 @@ app.get(`${BASE_PATH}/health`, (_req, res) => {
     });
 });
 
+/** Respuesta 404 para rutas no registradas. */
 app.use((_req, res) => {
     res.status(404).json({ success: false, msg: 'La ruta solicitada no existe' });
 });

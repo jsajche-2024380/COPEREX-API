@@ -1,3 +1,8 @@
+/**
+ * Middleware de autenticación JWT.
+ * Acepta token en header x-token o Authorization: Bearer.
+ * Verifica firma, issuer/audience si están configurados, y que el admin exista y esté activo.
+ */
 import jwt from 'jsonwebtoken';
 import Admin from '../src/models/admin.model.js';
 import { env } from '../configs/app.js';

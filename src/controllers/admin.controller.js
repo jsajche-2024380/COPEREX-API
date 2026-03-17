@@ -1,3 +1,6 @@
+/**
+ * Controladores de administradores: listar, obtener por ID, crear, actualizar, cambiar contraseña.
+ */
 import mongoose from 'mongoose';
 import {
     getAllAdmins,

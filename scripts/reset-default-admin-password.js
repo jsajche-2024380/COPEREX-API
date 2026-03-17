@@ -1,5 +1,7 @@
-
-
+/**
+ * Script de utilidad: actualiza la contraseña del admin con DEFAULT_ADMIN_EMAIL al valor actual de DEFAULT_ADMIN_PASSWORD en .env.
+ * Uso: node scripts/reset-default-admin-password.js (con MONGODB_URI y DEFAULT_* definidos en .env).
+ */
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Admin from '../src/models/admin.model.js';

@@ -1,3 +1,7 @@
+/**
+ * Generación del reporte Excel de empresas (PMA punto 4).
+ * Incluye todas las empresas ordenadas por nombre, con encabezados formateados y total.
+ */
 import ExcelJS from 'exceljs';
 import Company from '../src/models/company.model.js';
 
@@ -30,6 +34,7 @@ const COLUMNS = [
     { header: 'Fecha de Registro', width: 20 },
 ];
 
+/** Formatea una fecha para locale es-GT. */
 function formatDate(date) {
     if (!date) return '';
     const d = new Date(date);
@@ -40,6 +45,7 @@ function formatDate(date) {
     });
 }
 
+/** Construye un workbook Excel con todas las empresas; retorna null si no hay datos. */
 export async function generateExcelWorkbook() {
     const companies = await Company.find().sort({ companyName: 1 }).lean();
     if (!companies || companies.length === 0) return null;

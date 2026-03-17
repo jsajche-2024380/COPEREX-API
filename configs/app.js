@@ -1,3 +1,7 @@
+/**
+ * Configuración central de la aplicación.
+ * Carga variables de entorno y exporta un objeto env con valores por defecto.
+ */
 import dotenv from 'dotenv';
 
 dotenv.config();

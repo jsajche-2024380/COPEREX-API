@@ -1,3 +1,4 @@
+/** Mensajes centralizados de la API para respuestas y errores. */
 export const messages = {
     AUTH_LOGIN_SUCCESS: 'Inicio de sesión exitoso',
     AUTH_LOGOUT_SUCCESS: 'Sesión cerrada correctamente',

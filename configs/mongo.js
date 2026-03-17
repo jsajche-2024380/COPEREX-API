@@ -1,3 +1,7 @@
+/**
+ * Conexión a MongoDB.
+ * Configura eventos de conexión y reconexión; debe invocarse al iniciar la aplicación.
+ */
 import mongoose from 'mongoose';
 import { env } from './app.js';
 

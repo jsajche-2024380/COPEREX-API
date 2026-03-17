@@ -1,3 +1,6 @@
+/**
+ * Lógica de negocio de autenticación: validación de credenciales, estado activo y generación de JWT.
+ */
 import Admin from '../models/admin.model.js';
 import { comparePassword } from '../../helpers/encrypt.js';
 import { generateJWT } from '../../helpers/generate-jwt.js';

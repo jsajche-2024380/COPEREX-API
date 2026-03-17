@@ -1,3 +1,6 @@
+/**
+ * Validadores para administradores: creación (name, email, password), actualización y cambio de contraseña.
+ */
 import { body, param } from 'express-validator';
 import Admin from '../models/admin.model.js';
 
